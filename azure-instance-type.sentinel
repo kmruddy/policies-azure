@@ -1,28 +1,17 @@
-import "tfplan"
+import "tfplan-functions" as plan
+
+allowed_sizes = ["Standard_A0", "Standard_A1"]
+
+allAzureLinuxVMs = plan.find_resources("azurerm_linux_virtual_machine")
+
+violatingAzureLinuxVMs = plan.filter_attribute_not_in_list(allAzureLinuxVMs, "size", allowed_sizes, true)
 
 get_resources = func(type) {
 		return get_resources_root_only(type)
 }
 
-get_resources_root_only = func(type) {
-	resources = []
-	named_and_counted_resources = {}
-
-	for named_and_counted_resources as _, instances {
-		for instances as _, body {
-			append(resources, body)
-		}
-	}
-	return resources
-}
-
-allowed_vm_sizes = [
-	"Standard_A0",
-	"Standard_A1",
-]
+violations = length(violatingAzureLinuxVMs["messages"])
 
 main = rule {
-	all get_resources("azurerm_linux_virtual_machine") as r {
-		r.applied.size in allowed_vm_sizes
-	}
+  violations is 0
 }
