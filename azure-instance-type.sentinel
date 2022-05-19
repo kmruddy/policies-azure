@@ -22,7 +22,7 @@ allowed_vm_sizes = [
 ]
 
 vm_size_allowed = rule {
-	all get_resources("azurerm_virtual_machine") as r {
-		r.applied.vm_size in allowed_vm_sizes
+	all get_resources("azurerm_linux_virtual_machine") as r {
+		r.applied.size in allowed_vm_sizes
 	}
 }
