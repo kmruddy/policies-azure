@@ -26,7 +26,3 @@ vm_size_allowed = rule {
 		r.applied.vm_size in allowed_vm_sizes
 	}
 }
-
-main = rule {
-	(vm_size_allowed) else true
-}
